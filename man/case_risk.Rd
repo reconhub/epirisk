@@ -14,7 +14,8 @@ case_risk(onset, isolation, R, time_period, p_delay,
 assumed to ' no longer seed infections)}
 
 \item{R}{the average reproduction number, i.e. number of secondary cases per
-infected case}
+infected case; can be a single value, or a vector with one value per case
+(recycled if needed)}
 
 \item{time_period}{the number of days since the isolation for cases to be
 included in the analysis}
@@ -54,7 +55,7 @@ if (require(ggplot2)) {
   ggplot(df, aes(y = id, yend = id)) +
     geom_segment(aes(x = onset, xend = isolation, color = risks),
                  size = 4) +
-    geom_vline(xintercept = today()) +
+    geom_vline(aes(xintercept = today())) +
     scale_color_gradientn("Risk 2nd cases", colors = c("#80aaff", "gold", "#b3003b")) +
   labs(title = "Risk and infectious period",
        x = "Infectious period (onset -> isolation)")

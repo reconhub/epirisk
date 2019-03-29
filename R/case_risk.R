@@ -28,7 +28,8 @@
 #'   assumed to ' no longer seed infections)
 #'
 #' @param R the average reproduction number, i.e. number of secondary cases per
-#'   infected case
+#'   infected case; can be a single value, or a vector with one value per case
+#'   (recycled if needed)
 #'
 #' @param time_period the number of days since the isolation for cases to be
 #'   included in the analysis
@@ -56,7 +57,7 @@
 #'   ggplot(df, aes(y = id, yend = id)) +
 #'     geom_segment(aes(x = onset, xend = isolation, color = risks),
 #'                  size = 4) +
-#'     geom_vline(xintercept = today()) +
+#'     geom_vline(aes(xintercept = today())) +
 #'     scale_color_gradientn("Risk 2nd cases", colors = c("#80aaff", "gold", "#b3003b")) +
 #'   labs(title = "Risk and infectious period",
 #'        x = "Infectious period (onset -> isolation)")
@@ -68,18 +69,18 @@ case_risk <- function(onset, isolation, R, time_period, p_delay,
   
   ## check that inputs are correct
   if (!inherits(onset, "Date")) {
-    msg <- sprintf("onset is not a `Date` object but a %s",
+    msg <- sprintf("onset is not a `Date` object but a `%s`",
                    class(onset)[1])
     stop(msg)
   }
   if (!inherits(isolation, "Date")) {
-    msg <- sprintf("isolation is not a `Date` object but a %s",
+    msg <- sprintf("isolation is not a `Date` object but a `%s`",
                    class(isolation)[1])
     stop(msg)
   }
   if (any(stats::na.omit(onset > isolation))) {
     msg <- "Some dates of isolation predate the onset"
-    stop(msg)
+    warning(msg)
   }
   if (any(is.na(onset))) {
     msg <- "Some onset dates are missing: these cases will be ignored"
@@ -89,11 +90,11 @@ case_risk <- function(onset, isolation, R, time_period, p_delay,
     msg <- "Some isolation dates are missing: these cases will be ignored"
     warning(msg)
   }
-  if (is.null(R) || !is.finite(R)) {
+  if (is.null(R) || any(!is.finite(R))) {
     msg <- "`R` needs to be a finite number"
     stop(msg)
   }
-  if (R < 0) {
+  if (any(R < 0)) {
     msg <- "`R` needs to be a positive number"
     stop(msg)
   }
@@ -110,7 +111,7 @@ case_risk <- function(onset, isolation, R, time_period, p_delay,
   }
 
   if (!inherits(p_delay, "function")) {
-    msg <- sprintf("`dist_delay` is not a `function`, but a %s",
+    msg <- sprintf("`dist_delay` is not a `function`, but a `%s`",
                    class(p_delay)[1])
     stop(msg)
   }
