@@ -1,14 +1,15 @@
 Package: epirisk
-Title: An expressive Title in Titlecase
+Title: Epidemiological risks estimation
 Version: 0.0.1.9000
-Authors@R: person("Your", "Name", email = "your.name@localhost", role = c("aut", "cre"))
-Description: Please add a description.
-Depends: R (>= 3.5.2)
+Authors@R: person("Thibaut", "Jombart", email = "thibautjombart@gmail.com", role = c("aut", "cre"))
+Description: Tools for estimating risks of secondary cases based on data gathered during outbreak response. This package is being developed as part of the response to the Ebola outbreak in North Kivu, and is still under development. Do not use it unless you have contacted the authors.   
+Depends: R (>= 3.0.0)
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
+Imports: ggplot2
 Suggests: testthat, roxygen2
-RoxygenNote: 6.0.1
+RoxygenNote: 6.1.1
 URL: https://github.com/reconhub/epirisk
 BugReports: https://github.com/reconhub/epirisk/issues
-VignetteBuilder: knitr
+Roxygen: list(markdown = TRUE)
